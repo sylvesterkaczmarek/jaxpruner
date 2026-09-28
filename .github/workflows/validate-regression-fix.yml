@@ -1,0 +1,43 @@
+name: Exact-source regression validation
+on:
+  push:
+    branches: ['validation/partial-block-padding-20260928']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12"]
+    env:
+      TF_CPP_MIN_LOG_LEVEL: '3'
+      JAX_PLATFORMS: cpu
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      TF_NUM_INTRAOP_THREADS: '1'
+      TF_NUM_INTEROP_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: sylvesterkaczmarek/jaxpruner
+          ref: 'fd6af4a3400c16e3791512c93a50be0f945f114f'
+          path: work
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install validation dependencies
+        run: python -m pip install -e ./work jax==0.4.38 jaxlib==0.4.38 flax==0.10.2 optax==0.2.4 chex==0.1.88 numpy==2.2.6 absl-py pytest==9.1.1 pytest-cov build ruff
+      - name: Validate exact source and installed wheel
+        run: python validation/verify.py work evidence
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: evidence-${{ matrix.python }}
+          path: evidence
+          retention-days: 14

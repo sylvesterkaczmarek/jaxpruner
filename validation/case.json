@@ -1,0 +1,29 @@
+{
+  "repo": "google-research/jaxpruner",
+  "base_branch": "main",
+  "base": "e7af4e4e4748782d6bc433249e359f74ffb845ba",
+  "source": "jaxpruner/mask_calculator.py",
+  "test": "jaxpruner/block_padding_test.py",
+  "suite_files": [
+    "jaxpruner/algorithms/global_pruners_test.py",
+    "jaxpruner/algorithms/pruners_test.py",
+    "jaxpruner/algorithms/sparse_trainers_test.py",
+    "jaxpruner/algorithms/ste_test.py",
+    "jaxpruner/api_test.py",
+    "jaxpruner/base_updater_test.py",
+    "jaxpruner/mask_calculator_test.py",
+    "jaxpruner/sparsity_distributions_test.py",
+    "jaxpruner/sparsity_schedules_test.py",
+    "jaxpruner/utils_test.py"
+  ],
+  "exclude_expression": "not LimitMemoryUsage",
+  "issue": 15,
+  "issue_url": "https://github.com/google-research/jaxpruner/issues/15",
+  "new_counts": [
+    44,
+    36
+  ],
+  "branch": "fix/partial-block-padding-20260928",
+  "title": "Pad partial pruning blocks to their next boundary",
+  "head": "fd6af4a3400c16e3791512c93a50be0f945f114f"
+}
